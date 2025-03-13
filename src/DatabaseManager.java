@@ -3,8 +3,13 @@ import java.sql.*;
 public class DatabaseManager {
     private static final String URL = "jdbc:sqlite:homework.db";
 
+    // Static block to initialize the database and table
+    static {
+        createTable();
+    }
+
     // Create the homework table if it doesn't exist
-    public static void createTable() {
+    private static void createTable() {
         String sql = "CREATE TABLE IF NOT EXISTS homework ("
                 + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + "subject TEXT NOT NULL,"
@@ -13,7 +18,9 @@ public class DatabaseManager {
 
         try (Connection conn = DriverManager.getConnection(URL);
              Statement stmt = conn.createStatement()) {
-            stmt.execute(sql);
+            if (conn != null) {
+                stmt.execute(sql);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -59,4 +66,3 @@ public class DatabaseManager {
         }
     }
 }
-
